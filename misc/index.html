@@ -1,0 +1,49 @@
+<div class="row">
+	<div class="col-md-10 offset-md-1"> <img class="mx-auto mt-4 mb-4 d-block" style="border-radius: 5%;" height="350" src="/files/34ae97e8adef9fec9ea8294afc6d2705/HeroCTF_icon_500.png" />
+		<h1 class="text-center">
+           <strong>Welcome to HeroCTF v6 !</strong>
+        </h1>
+		<h3 class="text-center mt-3">
+            <p><strong>Event in :</strong></p>
+            <p id="countdown">...</p>
+            <p>Start : 25 october at 9pm - End : 27 october at 11pm (UTC+2 - Paris)
+        </h3>
+		<h4 class="text-center mt-5">
+            <a class="mx-2" href="https://twitter.com/HeroCTF" target="_blank">
+                <i class="fab fa-twitter fa-2x text-white" aria-hidden="true"></i>
+            </a>
+            <a class="mx-2" href="https://discord.gg/mgk9bv7" target="_blank">
+                <i class="fab fa-discord fa-2x text-white" aria-hidden="true"></i>
+            </a>
+            <a class="mx-2" href="https://ctftime.org/event/2496" target="_blank">
+                <i class="fas fa-flag fa-2x text-white" aria-hidden="true"></i>
+            </a>
+            <a class="mx-2" href="https://www.linkedin.com/company/heroctf/" target="_blank">
+                <i class="fab fa-linkedin fa-2x text-white" aria-hidden="true"></i>
+            </a>
+        </h4>
+    </div>
+</div>
+<script>
+document.addEventListener("DOMContentLoaded", function(event) {
+	const choosenDate = Date.UTC(2024, 10, 25, 19, 0, 0, 0);
+	let countdown = setInterval(function() {
+		if(choosenDate - new Date().getTime() > 0) {
+			const today = new Date().getTime();
+			const diff = choosenDate - today;
+			let days = Math.floor(diff / (1000 * 60 * 60 * 24));
+			let hours = Math.floor((diff % (1000 * 60 * 60 * 24)) / (1000 * 60 * 60));
+			let minutes = Math.floor((diff % (1000 * 60 * 60)) / (1000 * 60));
+			let seconds = Math.floor((diff % (1000 * 60)) / 1000);
+			let message = "";
+			message += days + "D:";
+			message += hours + "H:";
+			message += minutes + "M:";
+			message += seconds + "S";
+			document.getElementById("countdown").innerHTML = message;
+		} else {
+			document.getElementById("countdown").innerHTML = "well... NOW!";
+		}
+	}, 1000);
+});
+</script>

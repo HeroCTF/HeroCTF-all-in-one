@@ -58,14 +58,23 @@
     - privkey.pem
   become: true
 
-- name: Copy challenge.py # with first blood bot
+- name: "Copy 'CTFd_api_v1_challenges.py' for first blood Discord webhook"
   ansible.builtin.copy:
-    src: "files/challenge.py"
+    src: "files/CTFd_api_v1_challenges.py"
     dest: "/home/{{ ctf_user }}/CTFd/CTFd/api/v1/challenges.py"
     owner: "{{ ctf_user }}"
     group: "{{ ctf_user }}"
     mode: "0644"
   when: ctfd_install_discord_webhook
+  become: true
+
+- name: "Copy 'CTFd_config.py' for better connection settings with the database"
+  ansible.builtin.copy:
+    src: "files/CTFd_config.py"
+    dest: "/home/{{ ctf_user }}/CTFd/CTFd/config.py"
+    owner: "{{ ctf_user }}"
+    group: "{{ ctf_user }}"
+    mode: "0644"
   become: true
 
 - name: Extract the custom theme
