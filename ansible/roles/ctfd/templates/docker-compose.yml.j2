@@ -1,0 +1,65 @@
+---
+
+services:
+  ctfd:
+    build: .
+    user: root
+    restart: always
+    environment:
+      - UPLOAD_FOLDER=/var/uploads
+      - DATABASE_URL=postgresql://ctfd:ctfd@db/ctfd
+      - REDIS_URL=redis://redis:6379
+      - WORKERS={{ ansible_processor_vcpus }}
+      - LOG_FOLDER=/var/log/CTFd
+      - ACCESS_LOG=-
+      - ERROR_LOG=-
+      - REVERSE_PROXY=true
+      - SECRET_KEY=${SECRET_KEY}
+      - DISCORD_WEBHOOK_URL=${DISCORD_WEBHOOK_URL} # Discord Webhook for first blood bot
+    volumes:
+      - ./data/CTFd/logs:/var/log/CTFd
+      - ./data/CTFd/uploads:/var/uploads
+      - .:/opt/CTFd:ro
+    depends_on:
+      - db
+    networks:
+      default:
+      internal:
+
+  nginx:
+    image: nginx:1.27-alpine
+    restart: always
+    volumes:
+      - ./conf/nginx/http.conf:/etc/nginx/nginx.conf
+      - ./conf/nginx/certs:/etc/nginx/certs
+    ports:
+      - 443:443
+    depends_on:
+      - ctfd
+    networks:
+      default:
+
+  db:
+    image: postgres:17-alpine
+    restart: always
+    environment:
+      - POSTGRES_USER=ctfd
+      - POSTGRES_PASSWORD=ctfd
+      - POSTGRES_DB=ctfd
+    volumes:
+      - ./data/postgres:/var/lib/postgresql/data
+    networks:
+      internal:
+
+  redis:
+    image: redis:7-alpine
+    restart: always
+    volumes:
+      - ./data/redis:/data
+    networks:
+      internal:
+
+networks:
+  default:
+  internal:
+    internal: true

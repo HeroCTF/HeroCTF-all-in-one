@@ -42,10 +42,10 @@ resource "linode_firewall" "ctfd_firewall" {
     }
 
     inbound {
-        label    = "allow-http-https"
+        label    = "allow-https"
         action   = "ACCEPT"
         protocol = "TCP"
-        ports    = "80,443"
+        ports    = "443"
         ipv4     = ["0.0.0.0/0"]
         ipv6     = ["::/0"]
     }

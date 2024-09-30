@@ -1,1 +1,5 @@
 ctfd_version: "3.7.3"
+ctfd_install_theme: true
+ctfd_theme_name: "hacker_theme.zip"
+ctfd_domain: "ctf.heroctf.fr"
+ctfd_install_discord_webhook: false

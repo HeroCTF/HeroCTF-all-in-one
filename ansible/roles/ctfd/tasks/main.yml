@@ -1,0 +1,103 @@
+---
+
+- name: "Clone CTFd at version '{{ ctfd_version }}' to '/home/{{ ctf_user }}/CTFd'"
+  ansible.builtin.git:
+    repo: "https://github.com/CTFd/CTFd.git"
+    dest: "/home/{{ ctf_user }}/CTFd"
+    version: "{{ ctfd_version }}"
+    force: true
+  become: true
+  become_user: "{{ ctf_user }}"
+
+- name: "Copy '.env' to '/home/{{ ctf_user }}/CTFd/.env'"
+  ansible.builtin.copy:
+    src: "files/.env"
+    dest: "/home/{{ ctf_user }}/CTFd/.env"
+    owner: "{{ ctf_user }}"
+    group: "{{ ctf_user }}"
+    mode: "0644"
+  become: true
+
+- name: "Copy 'docker-compose.yml.j2' to '/home/{{ ctf_user }}/CTFd/docker-compose.yml'"
+  ansible.builtin.template:
+    src: "docker-compose.yml.j2"
+    dest: "/home/{{ ctf_user }}/CTFd/docker-compose.yml"
+    owner: "{{ ctf_user }}"
+    group: "{{ ctf_user }}"
+    mode: "0644"
+  become: true
+  become_user: "{{ ctf_user }}"
+
+- name: "Copy 'http.conf.j2' to '/home/{{ ctf_user }}/CTFd/conf/nginx/http.conf'"
+  ansible.builtin.template:
+    src: "http.conf.j2"
+    dest: "/home/{{ ctf_user }}/CTFd/conf/nginx/http.conf"
+    owner: "{{ ctf_user }}"
+    group: "{{ ctf_user }}"
+    mode: "0644"
+  become: true
+
+- name: "Create a 'certs' directory for HTTPs certificates"
+  ansible.builtin.file:
+    path: "/home/{{ ctf_user }}/CTFd/conf/nginx/certs/"
+    state: directory
+    owner: "{{ ctf_user }}"
+    group: "{{ ctf_user }}"
+    mode: "0775"
+  become: true
+
+- name: "Copy 'fullchain.pem' & 'privkey.pem' to '/home/{{ ctf_user }}/CTFd/conf/nginx/certs/'"
+  ansible.builtin.copy:
+    src: "files/certs/{{ item }}"
+    dest: "/home/{{ ctf_user }}/CTFd/conf/nginx/certs/{{ item }}"
+    owner: "{{ ctf_user }}"
+    group: "{{ ctf_user }}"
+    mode: "0644"
+  loop:
+    - fullchain.pem
+    - privkey.pem
+  become: true
+
+- name: Copy challenge.py # with first blood bot
+  ansible.builtin.copy:
+    src: "files/challenge.py"
+    dest: "/home/{{ ctf_user }}/CTFd/CTFd/api/v1/challenges.py"
+    owner: "{{ ctf_user }}"
+    group: "{{ ctf_user }}"
+    mode: "0644"
+  when: ctfd_install_discord_webhook
+  become: true
+
+- name: Extract the custom theme
+  ansible.builtin.unarchive:
+    src: "files/{{ ctfd_theme_name }}"
+    dest: "/home/{{ ctf_user }}/CTFd/CTFd/themes/"
+  become: true
+  become_user: "{{ ctf_user }}"
+  when: ctfd_install_theme
+
+- name: "Create a 'data' directory for docker-compose volumes"
+  ansible.builtin.file:
+    path: "/home/{{ ctf_user }}/CTFd/data/"
+    state: directory
+    owner: "{{ ctf_user }}"
+    group: "{{ ctf_user }}"
+    mode: "0777"
+    recurse: true
+  become: true
+
+- name: "Add 'psycopg2-binary' to requirements.txt for PostgreSQL connection"
+  ansible.builtin.shell: "echo 'psycopg2-binary' >> requirements.txt"
+  args:
+    chdir: "/home/{{ ctf_user }}/CTFd"
+  become: true
+  become_user: "{{ ctf_user }}"
+
+- name: Start CTFd docker-compose
+  ansible.builtin.shell: "docker compose up -d --build"
+  args:
+    chdir: "/home/{{ ctf_user }}/CTFd"
+  register: ctfd_docker_compose_output
+  changed_when: "'recreated' in ctfd_docker_compose_output.stdout or 'Pulling' in ctfd_docker_compose_output.stdout"
+  become: true
+  become_user: "{{ ctf_user }}"

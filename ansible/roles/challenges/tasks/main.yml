@@ -23,6 +23,7 @@
 - name: "Clone HeroCTF challenges' repository to '/home/{{ ctf_user }}/challenges'"
   ansible.builtin.git:
     repo: "{{ challenges_git_url }}"
+    version: "main"
     dest: "/home/{{ ctf_user }}/challenges"
     accept_hostkey: true
     force: true
