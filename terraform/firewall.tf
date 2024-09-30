@@ -27,3 +27,33 @@ resource "linode_firewall" "challenge_firewall" {
 
     linodes = [for instance in linode_instance.challenges : instance.id]
 }
+
+resource "linode_firewall" "ctfd_firewall" {
+    label = "ctfd_firewall"
+
+    // INBOUND (SSH & HTTP/HTTPs)
+    inbound {
+        label    = "allow-ssh"
+        action   = "ACCEPT"
+        protocol = "TCP"
+        ports    = "22"
+        ipv4     = ["0.0.0.0/0"]
+        ipv6     = ["::/0"]
+    }
+
+    inbound {
+        label    = "allow-http-https"
+        action   = "ACCEPT"
+        protocol = "TCP"
+        ports    = "80,443"
+        ipv4     = ["0.0.0.0/0"]
+        ipv6     = ["::/0"]
+    }
+
+    inbound_policy = "DROP"
+
+    // OUTBOUND (Allow all)
+    outbound_policy = "ACCEPT"
+
+    linodes = [linode_instance.ctfd.id]
+}

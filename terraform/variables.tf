@@ -1,34 +1,42 @@
 // Secret variables from the ".env" file
 variable "LINODE_API_KEY" {
     type = string
+    description = "Linode API key"
+    sensitive = true
 }
 
 variable "ROOT_PASSWORD" {
     type = string
+    description = "Root password for the Linode instances"
+    sensitive = true
 }
 
 variable "SSH_PUBLIC_KEY_PATH" {
     type = string
+    description = "Path to the public SSH key"
 }
 
 // Public variables with default values
-variable "challenge_count" {
+variable "challenges_count" {
     type = number
-    default = 2
+    description = "Number of challenge instances"
 }
 
 variable "ssh_key_name" {
     type = string
-    default = "heroctf-ssh-key"
+    description = "Name of the SSH key"
+    default = "ctf-ssh-key"
 }
 
 variable "compute_region" {
     type = string
+    description = "Linode instances geographical region"
     default = "fr-par" // FR, Paris
 }
 
 variable "compute_instance_type" {
     type = map(string)
+    description = "Linode instances specifications"
     default = {
         "dedicated-4gb" = "g6-dedicated-2"
         "dedicated-8gb" = "g6-dedicated-4"
@@ -38,6 +46,7 @@ variable "compute_instance_type" {
 
 variable "compute_os" {
     type = map(string)
+    description = "Linode instances operating system"
     default = {
       "debian12" = "linode/debian12"
     }
