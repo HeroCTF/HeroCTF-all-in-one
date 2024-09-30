@@ -1,0 +1,36 @@
+name: Make scheduled CTFd backup
+
+on:
+  schedule:
+    - cron:  '0 0 * * *'
+
+jobs:
+  deploy:
+    runs-on: ubuntu-22.04
+
+    env:
+      BACKUP_PATH: /tmp/ctfd_backup.zip
+      CTFD_URL: https://ctf.heroctf.fr
+
+    - name: Install curl
+      shell: bash
+      run: |
+        apt-get update && apt-get install -y curl
+
+    - name: Do backup
+      shell: bash
+      run: |
+        curl "${{ env.CTFD_URL }}/admin/export" \
+          -b "session=${{ secrets.CTFD_COOKIE_SESSION }}" \
+          -o "${{ env.BACKUP_PATH }}"
+
+    - name: Obtain current date
+      shell: bash
+      run: echo "BACKUP_TIME=$(date '+%Y-%m-%d_%H-%M')" >> $GITHUB_ENV
+
+    - name: Upload backup
+      uses: actions/upload-artifact@v2
+      with:
+        name: "ctfd_backup_${BACKUP_TIME}.zip"
+        path: "${{ env.BACKUP_PATH }}"
+        retention-days: 7
