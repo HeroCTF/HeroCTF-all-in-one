@@ -1,6 +1,8 @@
 ---
 
-- hosts: challenges
-  gather_facts: yes
+- name: Setup the challenges hosts
+  hosts: challenges
+  gather_facts: true
   roles:
-  - challs
+    - prerequisites
+    - challenges

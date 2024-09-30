@@ -1,0 +1,28 @@
+---
+
+- name: Set timezone to Europe/Paris
+  community.general.timezone:
+    name: Europe/Paris
+  become: true
+
+- name: Set VM hostname to ansible inventory's hostname
+  ansible.builtin.hostname:
+    name: "{{ inventory_hostname }}"
+  become: true
+
+- name: "Create user '{{ ctf_user }}'"
+  ansible.builtin.user:
+    name: "{{ ctf_user }}"
+    create_home: true
+    shell: /bin/bash
+  become: true
+
+- name: "Create ~/.ssh directory"
+  ansible.builtin.file:
+    path: "/home/{{ ctf_user }}/.ssh"
+    state: directory
+    owner: "{{ ctf_user }}"
+    group: "{{ ctf_user }}"
+    mode: "0755"
+  become: true
+  become_user: "{{ ctf_user }}"

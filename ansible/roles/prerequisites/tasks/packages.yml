@@ -1,0 +1,19 @@
+---
+
+- name: Update APT repositories
+  ansible.builtin.apt:
+    update_cache: true
+  become: true
+
+- name: Install usefull packages
+  ansible.builtin.apt:
+    pkg:
+      - vim
+      - git
+      - unzip
+      - p7zip-full
+      - curl
+      - wget
+      - acl # required by ansible to become an unprivileged user
+      - gnupg # required to add the Docker repository
+  become: true

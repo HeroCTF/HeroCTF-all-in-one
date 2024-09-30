@@ -1,0 +1,19 @@
+---
+
+- name: Install useful packages
+  ansible.builtin.include_tasks: packages.yml
+
+- name: Configure the VM settings
+  ansible.builtin.include_tasks: config.yml
+
+- name: Check Docker service state
+  ansible.builtin.systemd:
+    name: docker
+    state: started
+  register: docker_service_state
+  ignore_errors: true
+  become: true
+
+- name: Install docker & docker-compose
+  ansible.builtin.include_tasks: docker.yml
+  when: docker_service_state.failed

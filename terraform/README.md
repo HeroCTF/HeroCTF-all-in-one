@@ -32,7 +32,7 @@ chmod 600 ~/.ssh/heroctf/linode
 Initialize, plan & apply `terraform`:
 
 ```bash
-source .env
+set -a; source .env; set +a
 terraform init
 terraform plan -var='challenges_count=4'
 terraform apply -var='challenges_count=4'
@@ -43,7 +43,7 @@ ssh root@<public_ip_v4_address> -i ~/.ssh/heroctf/linode
 Plan and destroy `terraform`:
 
 ```bash
-source .env
+set -a; source .env; set +a
 terraform plan -destroy
 terraform destroy
 ```
