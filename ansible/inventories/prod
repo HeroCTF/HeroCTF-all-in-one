@@ -1,0 +1,12 @@
+[ctfd]
+heroctf-ctfd ansible_connection=ssh ansible_user=root
+
+[challenges]
+heroctf-challenge-1 ansible_connection=ssh ansible_user=root
+heroctf-challenge-2 ansible_connection=ssh ansible_user=root
+heroctf-challenge-3 ansible_connection=ssh ansible_user=root
+heroctf-challenge-4 ansible_connection=ssh ansible_user=root
+heroctf-challenge-5 ansible_connection=ssh ansible_user=root
+heroctf-challenge-6 ansible_connection=ssh ansible_user=root
+heroctf-challenge-7 ansible_connection=ssh ansible_user=root
+heroctf-challenge-8 ansible_connection=ssh ansible_user=root

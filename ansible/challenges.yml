@@ -1,0 +1,6 @@
+---
+
+- hosts: challenges
+  gather_facts: yes
+  roles:
+  - challs

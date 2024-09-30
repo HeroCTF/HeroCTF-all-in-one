@@ -1,0 +1,6 @@
+---
+
+- hosts: ctfd
+  gather_facts: yes
+  roles:
+  - ctfd
