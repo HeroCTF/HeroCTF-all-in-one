@@ -26,7 +26,8 @@
 </div>
 <script>
 document.addEventListener("DOMContentLoaded", function(event) {
-	const choosenDate = Date.UTC(2024, 10, 25, 19, 0, 0, 0);
+    // Year, Month index (month-1), Day, Hour, Minutes
+	const choosenDate = Date.UTC(2024, 9, 25, 19, 0);
 	let countdown = setInterval(function() {
 		if(choosenDate - new Date().getTime() > 0) {
 			const today = new Date().getTime();
