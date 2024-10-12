@@ -1,7 +1,7 @@
-resource "linode_firewall" "challenge_firewall" {
-    label = "challenge_firewall"
+resource "linode_firewall" "dynamic_challenge_firewall" {
+    label = "dynamic_challenge_firewall"
 
-    // INBOUND (SSH & Challenges ports)
+    // INBOUND (SSH & Dynamic challenges ports)
     inbound {
         label    = "allow-ssh"
         action   = "ACCEPT"
@@ -12,7 +12,7 @@ resource "linode_firewall" "challenge_firewall" {
     }
 
     inbound {
-        label    = "allow-deploy-dynamic"
+        label    = "allow-dynamic-challenges"
         action   = "ACCEPT"
         protocol = "TCP"
         ports    = "10000-15000"
@@ -25,13 +25,43 @@ resource "linode_firewall" "challenge_firewall" {
     // OUTBOUND (Allow all)
     outbound_policy = "ACCEPT"
 
-    linodes = [for instance in linode_instance.challenges : instance.id]
+    linodes = [for instance in linode_instance.linode_instance.dynamic_challenges : instance.id]
 }
 
-resource "linode_firewall" "ctfd_firewall" {
-    label = "ctfd_firewall"
+resource "linode_firewall" "static_challenge_firewall" {
+    label = "static_challenge_firewall"
 
-    // INBOUND (SSH & HTTP/HTTPs)
+    // INBOUND (SSH & Satic challenges ports)
+    inbound {
+        label    = "allow-ssh"
+        action   = "ACCEPT"
+        protocol = "TCP"
+        ports    = "22"
+        ipv4     = ["0.0.0.0/0"]
+        ipv6     = ["::/0"]
+    }
+
+    inbound {
+        label    = "allow-static-challenges"
+        action   = "ACCEPT"
+        protocol = "TCP"
+        ports    = "3000-9999"
+        ipv4     = ["0.0.0.0/0"]
+        ipv6     = ["::/0"]
+    }
+
+    inbound_policy = "DROP"
+
+    // OUTBOUND (Allow all)
+    outbound_policy = "ACCEPT"
+
+    linodes = [for instance in linode_instance.linode_instance.static_challenges : instance.id]
+}
+
+resource "linode_firewall" "deploy_dynamic_firewall" {
+    label = "deploy_dynamic_firewall"
+
+    // INBOUND (SSH & HTTPS)
     inbound {
         label    = "allow-ssh"
         action   = "ACCEPT"
@@ -55,5 +85,5 @@ resource "linode_firewall" "ctfd_firewall" {
     // OUTBOUND (Allow all)
     outbound_policy = "ACCEPT"
 
-    linodes = [linode_instance.ctfd.id]
+    linodes = [linode_instance.deploy_dynamic.id]
 }

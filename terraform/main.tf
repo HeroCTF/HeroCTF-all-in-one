@@ -3,10 +3,10 @@ resource "linode_sshkey" "ctf_ssh_key" {
     ssh_key = chomp(file(var.SSH_PUBLIC_KEY_PATH))
 }
 
-resource "linode_instance" "challenges" {
-    count           = var.challenges_count
+resource "linode_instance" "static_challenges" {
+    count           = var.static_challenges_count
 
-    label           = "challenge-${count.index + 1}"
+    label           = "static-challenge-${count.index + 1}"
     image           = var.compute_os["debian12"]
     region          = var.compute_region
     type            = var.compute_instance_type["dedicated-8gb"]
@@ -18,15 +18,30 @@ resource "linode_instance" "challenges" {
     private_ip = true
 }
 
-resource "linode_instance" "ctfd" {
-    label           = "pre-ctfd" // CTFd instance for registration (not the final one)
+resource "linode_instance" "dynamic_challenges" {
+    count           = var.dynamic_challenges_count
+
+    label           = "dynamic-challenge-${count.index + 1}"
     image           = var.compute_os["debian12"]
     region          = var.compute_region
     type            = var.compute_instance_type["dedicated-8gb"]
     authorized_keys = [linode_sshkey.ctf_ssh_key.ssh_key]
     root_pass       = var.ROOT_PASSWORD
 
-    tags       = ["ctfd"]
+    tags       = ["challenge"]
+    swap_size  = 4096 // 4GB
+    private_ip = true
+}
+
+resource "linode_instance" "deploy_dynamic" {
+    label           = "deploy_dynamic"
+    image           = var.compute_os["debian12"]
+    region          = var.compute_region
+    type            = var.compute_instance_type["dedicated-8gb"]
+    authorized_keys = [linode_sshkey.ctf_ssh_key.ssh_key]
+    root_pass       = var.ROOT_PASSWORD
+
+    tags       = ["deploy_dynamic"]
     swap_size  = 4096 // 4GB
     private_ip = true
 }

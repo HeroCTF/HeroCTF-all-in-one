@@ -17,9 +17,16 @@ variable "SSH_PUBLIC_KEY_PATH" {
 }
 
 // Public variables with default values
-variable "challenges_count" {
+variable "static_challenges_count" {
     type = number
-    description = "Number of challenge instances"
+    description = "Number of static challenge instances"
+    default = 0
+}
+
+variable "dynamic_challenges_count" {
+    type = number
+    description = "Number of dynamic challenge instances"
+    default = 0
 }
 
 variable "ssh_key_name" {
