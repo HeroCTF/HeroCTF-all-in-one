@@ -1,33 +1,10 @@
 ---
 
-- name: "Upload 'github.key' to '/home/{{ ctf_user }}/.ssh/github.key'"
-  ansible.builtin.copy:
-    src: "files/github.key"
-    dest: "/home/{{ ctf_user }}/.ssh/github.key"
-    owner: "{{ ctf_user }}"
-    group: "{{ ctf_user }}"
-    mode: "0600"
-  become: true
-  become_user: "{{ ctf_user }}"
+- name: Setup Git repository of challenges
+  ansible.builtin.import_tasks:
+    file: git_repository.yml
 
-- name: "Copy SSH config file to '/home/{{ ctf_user }}/.ssh/config'"
-  ansible.builtin.template:
-    src: ssh_config.j2
-    dest: "/home/{{ ctf_user }}/.ssh/config"
-    owner: "{{ ctf_user }}"
-    group: "{{ ctf_user }}"
-    mode: "0644"
-  become: true
-  become_user: "{{ ctf_user }}"
-
-- name: "Clone HeroCTF challenges' repository to '/home/{{ ctf_user }}/challenges'"
-  ansible.builtin.git:
-    repo: "{{ challenges_git_url }}"
-    version: "main"
-    dest: "/home/{{ ctf_user }}/challenges"
-    accept_hostkey: true
-    force: true
-  become: true
-  become_user: "{{ ctf_user }}"
-  register: git_challenge_output
-  changed_when: git_challenge_output.changed
+- name: Setup docker configuration for dynamic challenges
+  ansible.builtin.import_tasks:
+    file: dynamic_docker_config.yml
+  when: inventory_hostname in groups['dynamic-challenges']

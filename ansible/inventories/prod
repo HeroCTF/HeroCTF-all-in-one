@@ -1,12 +1,14 @@
 [ctfd]
 heroctf-ctfd ansible_connection=ssh ansible_user=root
 
-[challenges]
-heroctf-challenge-1 ansible_connection=ssh ansible_user=root
-heroctf-challenge-2 ansible_connection=ssh ansible_user=root
-heroctf-challenge-3 ansible_connection=ssh ansible_user=root
-heroctf-challenge-4 ansible_connection=ssh ansible_user=root
-heroctf-challenge-5 ansible_connection=ssh ansible_user=root
-heroctf-challenge-6 ansible_connection=ssh ansible_user=root
-heroctf-challenge-7 ansible_connection=ssh ansible_user=root
-heroctf-challenge-8 ansible_connection=ssh ansible_user=root
+[static-challenges]
+heroctf-static-1 ansible_connection=ssh ansible_user=root
+heroctf-static-2 ansible_connection=ssh ansible_user=root
+
+[dynamic-challenges]
+heroctf-dynamic-1 ansible_connection=ssh ansible_user=root
+heroctf-dynamic-2 ansible_connection=ssh ansible_user=root
+heroctf-dynamic-3 ansible_connection=ssh ansible_user=root
+heroctf-dynamic-4 ansible_connection=ssh ansible_user=root
+heroctf-dynamic-5 ansible_connection=ssh ansible_user=root
+heroctf-dynamic-6 ansible_connection=ssh ansible_user=root

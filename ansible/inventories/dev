@@ -1,5 +1,8 @@
 [ctfd]
 heroctf-ctfd ansible_connection=ssh ansible_user=root
 
-[challenges]
-heroctf-challenge-1 ansible_connection=ssh ansible_user=root
+[static-challenges]
+heroctf-static-1 ansible_connection=ssh ansible_user=root
+
+[dynamic-challenges]
+heroctf-dynamic-1 ansible_connection=ssh ansible_user=root

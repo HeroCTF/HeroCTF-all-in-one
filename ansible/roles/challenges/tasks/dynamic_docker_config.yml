@@ -1,0 +1,40 @@
+---
+
+- name: Upload Docker daemon configuration
+  ansible.builtin.copy:
+    src: docker_daemon.json
+    dest: /etc/docker/daemon.json
+    owner: root
+    group: root
+    mode: "0644"
+  become: true
+
+- name: Restrict port 2375 (Docker socket) from container instances
+  ansible.builtin.iptables:
+    chain: INPUT
+    protocol: tcp
+    destination_port: 2375
+    source: "{{ item }}"
+    jump: REJECT
+  loop:
+    - 192.168.0.0/16
+    - 172.17.0.0/12
+    - 10.99.0.0/16
+  become: true
+
+- name: Open Docker ports
+  ansible.builtin.lineinfile:
+    path: /lib/systemd/system/docker.service
+    regexp: '^ExecStart=/usr/bin/dockerd -H fd:// --containerd=/run/containerd/containerd.sock'
+    line: 'ExecStart=/usr/bin/dockerd -H fd://  -H tcp://0.0.0.0:2375 --containerd=/run/containerd/containerd.sock'
+    owner: root
+    group: root
+    mode: "0644"
+  become: true
+
+- name: Restart Docker systemd service
+  ansible.builtin.systemd_service:
+    daemon_reload: yes
+    name: docker
+    state: restarted
+  become: yes

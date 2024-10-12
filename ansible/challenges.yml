@@ -1,7 +1,7 @@
 ---
 
-- name: Setup the challenges hosts
-  hosts: challenges
+- name: Setup the static & dynamic challenges hosts
+  hosts: static-challenges:dynamic-challenges
   gather_facts: true
   roles:
     - prerequisites
