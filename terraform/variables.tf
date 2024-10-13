@@ -1,4 +1,4 @@
-// Secret variables from the ".env" file
+// Private variables (.env file)
 variable "LINODE_API_KEY" {
     type = string
     description = "Linode API key"
@@ -16,17 +16,15 @@ variable "SSH_PUBLIC_KEY_PATH" {
     description = "Path to the public SSH key"
 }
 
-// Public variables with default values
+// Public variables
 variable "static_challenges_count" {
     type = number
     description = "Number of static challenge instances"
-    default = 0
 }
 
 variable "dynamic_challenges_count" {
     type = number
     description = "Number of dynamic challenge instances"
-    default = 0
 }
 
 variable "ssh_key_name" {

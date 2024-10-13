@@ -1,12 +1,12 @@
 output "static_challenges_ip_addresses" {
     value = {
-        for instance in linode_instance.linode_instance.static_challenges : instance.label => instance.ipv4
+        for instance in linode_instance.static_challenges : instance.label => instance.ipv4
     }
 }
 
 output "dynamic_challenges_ip_addresses" {
     value = {
-        for instance in linode_instance.linode_instance.dynamic_challenges : instance.label => instance.ipv4
+        for instance in linode_instance.dynamic_challenges : instance.label => instance.ipv4
     }
 }
 

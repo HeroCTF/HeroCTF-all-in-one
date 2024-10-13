@@ -34,8 +34,8 @@ Initialize, plan & apply `terraform`:
 ```bash
 set -a; source .env; set +a
 terraform init
-terraform plan -var='static_challenges_count=4'
-terraform apply -var='static_challenges_count=4'
+terraform plan -var='static_challenges_count=1' -var='dynamic_challenges_count=1'
+terraform apply -var='static_challenges_count=1' -var='dynamic_challenges_count=1'
 
 ssh root@<public_ip_v4_address> -i ~/.ssh/heroctf/linode
 ```

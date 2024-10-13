@@ -12,6 +12,15 @@ resource "linode_firewall" "dynamic_challenge_firewall" {
     }
 
     inbound {
+        label    = "allow-docker-socket"
+        action   = "ACCEPT"
+        protocol = "TCP"
+        ports    = "2375"
+        ipv4     = ["${tolist(linode_instance.deploy_dynamic.ipv4)[1]}/32"] // Local IPv4
+        ipv6     = []
+    }
+
+    inbound {
         label    = "allow-dynamic-challenges"
         action   = "ACCEPT"
         protocol = "TCP"
@@ -25,7 +34,7 @@ resource "linode_firewall" "dynamic_challenge_firewall" {
     // OUTBOUND (Allow all)
     outbound_policy = "ACCEPT"
 
-    linodes = [for instance in linode_instance.linode_instance.dynamic_challenges : instance.id]
+    linodes = [for instance in linode_instance.dynamic_challenges : instance.id]
 }
 
 resource "linode_firewall" "static_challenge_firewall" {
@@ -55,7 +64,7 @@ resource "linode_firewall" "static_challenge_firewall" {
     // OUTBOUND (Allow all)
     outbound_policy = "ACCEPT"
 
-    linodes = [for instance in linode_instance.linode_instance.static_challenges : instance.id]
+    linodes = [for instance in linode_instance.static_challenges : instance.id]
 }
 
 resource "linode_firewall" "deploy_dynamic_firewall" {
