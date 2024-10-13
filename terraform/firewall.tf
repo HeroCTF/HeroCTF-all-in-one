@@ -16,8 +16,11 @@ resource "linode_firewall" "dynamic_challenge_firewall" {
         action   = "ACCEPT"
         protocol = "TCP"
         ports    = "2375"
-        ipv4     = ["${tolist(linode_instance.deploy_dynamic.ipv4)[1]}/32"] // Local IPv4
-        ipv6     = []
+        // IPv4 from the VPC
+        ipv4     = [
+            for interface in linode_instance.deploy_dynamic.interface : "${interface.ipv4[0].vpc}/32"
+                if interface.purpose == "vpc"
+        ]
     }
 
     inbound {

@@ -16,6 +16,15 @@ resource "linode_instance" "static_challenges" {
     tags       = ["challenge"]
     swap_size  = 4096 // 4GB
     private_ip = true
+
+    interface {
+        purpose     = "public"
+    }
+
+    interface {
+        purpose     = "vpc"
+        subnet_id   = linode_vpc_subnet.ctf_vpc_subnet.id
+    }
 }
 
 resource "linode_instance" "dynamic_challenges" {
@@ -31,6 +40,15 @@ resource "linode_instance" "dynamic_challenges" {
     tags       = ["challenge"]
     swap_size  = 4096 // 4GB
     private_ip = true
+
+    interface {
+        purpose     = "public"
+    }
+
+    interface {
+        purpose     = "vpc"
+        subnet_id   = linode_vpc_subnet.ctf_vpc_subnet.id
+    }
 }
 
 resource "linode_instance" "deploy_dynamic" {
@@ -44,4 +62,13 @@ resource "linode_instance" "deploy_dynamic" {
     tags       = ["deploy_dynamic"]
     swap_size  = 4096 // 4GB
     private_ip = true
+
+    interface {
+        purpose     = "public"
+    }
+
+    interface {
+        purpose     = "vpc"
+        subnet_id   = linode_vpc_subnet.ctf_vpc_subnet.id
+    }
 }
