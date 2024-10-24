@@ -1,0 +1,8 @@
+---
+
+- name: Setup the deploy-dynamic instance
+  hosts: deploy-dynamic
+  gather_facts: true
+  roles:
+    - prerequisites
+    - deploy_dynamic

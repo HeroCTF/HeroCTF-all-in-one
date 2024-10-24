@@ -1,0 +1,48 @@
+---
+
+- name: "Clone deploy-dynamic repository to '{{ deploy_dynamic_install_path }}'"
+  ansible.builtin.git:
+    repo: "https://github.com/HeroCTF/deploy-dynamic"
+    version: "main"
+    dest: "{{ deploy_dynamic_install_path }}"
+    accept_hostkey: true
+    force: true
+  become: true
+  become_user: "{{ ctf_user }}"
+  register: git_challenge_output
+  changed_when: git_challenge_output.changed
+
+- name: "Upload 'config.json' & '.env' to '{{ deploy_dynamic_install_path }}'"
+  ansible.builtin.copy:
+    src: "files/{{ item }}"
+    dest: "{{ deploy_dynamic_install_path }}/{{ item }}"
+    owner: "{{ ctf_user }}"
+    group: "{{ ctf_user }}"
+    mode: "0644"
+  become: true
+  become_user: "{{ ctf_user }}"
+  loop:
+    - "config.json"
+    - ".env"
+
+- name: "Upload HTTPs certs to '{{ deploy_dynamic_install_path }}/nginx/certs/'"
+  ansible.builtin.copy:
+    src: "files/{{ item }}"
+    dest: "{{ deploy_dynamic_install_path }}/nginx/certs/{{ item }}"
+    owner: "{{ ctf_user }}"
+    group: "{{ ctf_user }}"
+    mode: "0644"
+  become: true
+  become_user: "{{ ctf_user }}"
+  loop:
+    - "fullchain.pem"
+    - "privkey.pem"
+
+- name: Start deploy-dynamic docker-compose
+  ansible.builtin.shell: "docker compose up -d --build --force-recreate"
+  args:
+    chdir: "{{ deploy_dynamic_install_path }}"
+  register: docker_compose_output
+  changed_when: "'recreated' in docker_compose_output.stdout or 'Pulling' in docker_compose_output.stdout"
+  become: true
+  become_user: "{{ ctf_user }}"

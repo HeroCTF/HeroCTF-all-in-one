@@ -20,14 +20,21 @@
   become: true
   become_user: "{{ ctf_user }}"
 
-- name: "Clone HeroCTF challenges' repository to '/home/{{ ctf_user }}/challenges'"
+- name: "Clone HeroCTF challenges' repository to '{{ challenges_install_path }}'"
   ansible.builtin.git:
     repo: "{{ challenges_git_url }}"
     version: "main"
-    dest: "/home/{{ ctf_user }}/challenges"
+    dest: "{{ challenges_install_path }}"
     accept_hostkey: true
     force: true
   become: true
   become_user: "{{ ctf_user }}"
   register: git_challenge_output
   changed_when: git_challenge_output.changed
+
+- name: Run 'build_dynamic_challenges.sh' script
+  ansible.builtin.shell: "bash build_dynamic_challenges.sh"
+  args:
+    chdir: "{{ challenges_install_path }}"
+  become: true
+  become_user: "{{ ctf_user }}"
