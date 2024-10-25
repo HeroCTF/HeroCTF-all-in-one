@@ -641,15 +641,16 @@ class ChallengeAttempt(Resource):
                 )
 
                 # ==== PATCH START ==== #
+                from CTFd.models import Users
                 import requests  
                 import os
 
                 DISCORD_WEBHOOK_URL = os.getenv("DISCORD_WEBHOOK_URL", None)
                 if DISCORD_WEBHOOK_URL and not current_user.is_admin():
-                    solves_count = Solves.join(Users, Solves.user_id == Users.id) \
+                    solves_count = Solves.query.join(Users, Solves.user_id == Users.id) \
                         .filter(Solves.challenge_id == challenge_id) \
                         .filter(Users.type != "admin") \
-                        .filter(Users.ban.is_(False)).count()
+                        .filter(Users.banned.is_(False)).count()
 
                     if 1 <= solves_count <= 3:
                         content = ""
