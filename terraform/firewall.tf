@@ -54,6 +54,15 @@ resource "linode_firewall" "static_challenge_firewall" {
     }
 
     inbound {
+        label    = "allow-static-http-https"
+        action   = "ACCEPT"
+        protocol = "TCP"
+        ports    = "80,443"
+        ipv4     = ["0.0.0.0/0"]
+        ipv6     = ["::/0"]
+    }
+
+    inbound {
         label    = "allow-static-challenges"
         action   = "ACCEPT"
         protocol = "TCP"
