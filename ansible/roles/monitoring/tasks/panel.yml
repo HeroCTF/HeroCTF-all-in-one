@@ -15,19 +15,42 @@
     - { src: ".env", dest: ".env" }
 
 # ansible -i inventories/prod -m setup heroctf-static-1
-- name: Collect IP addresses from challenges
+- name: Collect IP addresses from challenges (cAdvisor)
   ansible.builtin.set_fact:
     cadvisor_targets: >-
       {% for host in groups['static-challenges'] + groups['dynamic-challenges'] -%}
-        , "{{ hostvars[host]['ansible_eth1']['ipv4']['address']}}:1080"
+            - targets:
+              - "{{ hostvars[host]['ansible_eth1']['ipv4']['address']}}:1080"
+              labels:
+                instance: "containers-{{ hostvars[host]['ansible_hostname'] }}"
+            {{''}}
       {%- endfor -%}
 
-- name: Collect IP addresses from challenges
+- name: Collect IP addresses from challenges (node-exporter)
   ansible.builtin.set_fact:
     nodeexporter_targets: >-
       {% for host in groups['static-challenges'] + groups['dynamic-challenges'] -%}
-        , "{{ hostvars[host]['ansible_eth1']['ipv4']['address']}}:9100"
+            - targets:
+              - "{{ hostvars[host]['ansible_eth1']['ipv4']['address']}}:9100"
+              labels:
+                instance: "vm-{{ hostvars[host]['ansible_hostname'] }}"
+            {{''}}
       {%- endfor -%}
+
+# - name: Collect IP addresses from challenges (/etc/hosts)
+#   ansible.builtin.set_fact:
+#     hosts_content: >-
+#       {% for host in groups['static-challenges'] + groups['dynamic-challenges'] %}
+#       {{ hostvars[host]['ansible_eth1']['ipv4']['address'] }} {{ hostvars[host]['ansible_hostname'] }}
+#       {% endfor %}
+
+# - name: Populate /etc/hosts with 'hosts_content'
+#   ansible.builtin.lineinfile:
+#     path: /etc/hosts
+#     line: "{{ item }}"
+#     state: present
+#   loop: "{{ hosts_content.splitlines() }}"
+#   become: true
 
 - name: "Setup Prometheus configuration"
   ansible.builtin.template:
