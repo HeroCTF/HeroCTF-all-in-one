@@ -24,6 +24,18 @@ resource "linode_firewall" "dynamic_challenge_firewall" {
     }
 
     inbound {
+        label    = "allow-docker-cadvisor"
+        action   = "ACCEPT"
+        protocol = "TCP"
+        ports    = "1080"
+        // IPv4 from the VPC
+        ipv4     = [
+            for interface in linode_instance.deploy_dynamic.interface : "${interface.ipv4[0].vpc}/32"
+                if interface.purpose == "vpc"
+        ]
+    }
+
+    inbound {
         label    = "allow-dynamic-challenges"
         action   = "ACCEPT"
         protocol = "TCP"
@@ -51,6 +63,18 @@ resource "linode_firewall" "static_challenge_firewall" {
         ports    = "22"
         ipv4     = ["0.0.0.0/0"]
         ipv6     = ["::/0"]
+    }
+
+    inbound {
+        label    = "allow-docker-cadvisor"
+        action   = "ACCEPT"
+        protocol = "TCP"
+        ports    = "1080"
+        // IPv4 from the VPC
+        ipv4     = [
+            for interface in linode_instance.deploy_dynamic.interface : "${interface.ipv4[0].vpc}/32"
+                if interface.purpose == "vpc"
+        ]
     }
 
     inbound {
@@ -97,6 +121,15 @@ resource "linode_firewall" "deploy_dynamic_firewall" {
         action   = "ACCEPT"
         protocol = "TCP"
         ports    = "443"
+        ipv4     = ["0.0.0.0/0"]
+        ipv6     = ["::/0"]
+    }
+
+    inbound {
+        label    = "allow-grafana"
+        action   = "ACCEPT"
+        protocol = "TCP"
+        ports    = "9100"
         ipv4     = ["0.0.0.0/0"]
         ipv6     = ["::/0"]
     }
