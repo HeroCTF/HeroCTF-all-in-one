@@ -17,9 +17,16 @@
 # ansible -i inventories/prod -m setup heroctf-static-1
 - name: Collect IP addresses from challenges
   ansible.builtin.set_fact:
-    ip_addresses: >-
+    cadvisor_targets: >-
       {% for host in groups['static-challenges'] + groups['dynamic-challenges'] -%}
         , "{{ hostvars[host]['ansible_eth1']['ipv4']['address']}}:1080"
+      {%- endfor -%}
+
+- name: Collect IP addresses from challenges
+  ansible.builtin.set_fact:
+    nodeexporter_targets: >-
+      {% for host in groups['static-challenges'] + groups['dynamic-challenges'] -%}
+        , "{{ hostvars[host]['ansible_eth1']['ipv4']['address']}}:9100"
       {%- endfor -%}
 
 - name: "Setup Prometheus configuration"

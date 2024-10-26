@@ -9,12 +9,12 @@
   become: true
   become_user: "{{ ctf_user }}"
 
-- name: Setup Grafana and Prometheus
+- name: Setup Panel
   ansible.builtin.import_tasks:
-    file: grafana_prometheus.yml
+    file: panel.yml
   when: inventory_hostname in groups['deploy-dynamic']
 
-- name: Setup cAdvisor
+- name: Setup Exporter
   ansible.builtin.import_tasks:
-    file: cadvisor.yml
+    file: exporter.yml
   when: inventory_hostname not in groups['deploy-dynamic']
