@@ -53,6 +53,8 @@ services:
       - GF_SECURITY_ADMIN_PASSWORD=${GRAFANA_ADMIN_PASSWORD}
     volumes:
       - ./datasource.yaml:/etc/grafana/provisioning/datasources/datasource.yaml
+      - ./dashboard.yaml:/etc/grafana/provisioning/dashboards/main.yaml
+      - ./dashboards:/var/lib/grafana/dashboards
     ports:
       - "9000:3000"
     depends_on:

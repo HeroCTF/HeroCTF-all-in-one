@@ -1,5 +1,15 @@
 ---
 
+- name: Create a directory for Grafana dashboards
+  ansible.builtin.file:
+    path: "{{ monitoring_install_path }}/dashboards"
+    state: directory
+    owner: "{{ ctf_user }}"
+    group: "{{ ctf_user }}"
+    mode: "0755"
+  become: true
+  become_user: "{{ ctf_user }}"
+
 - name: Copy docker compose and settings files
   ansible.builtin.copy:
     src: "files/{{ item.src }}"
@@ -12,6 +22,8 @@
   loop:
     - { src: "docker-compose.panel.yml", dest: "docker-compose.yml" }
     - { src: "datasource.yaml", dest: "datasource.yaml" }
+    - { src: "dashboard.yaml", dest: "dashboard.yaml" }
+    - { src: "heroctf_dashboard.json", dest: "dashboards/heroctf_dashboard.json" }
     - { src: ".env", dest: ".env" }
 
 # ansible -i inventories/prod -m setup heroctf-static-1
