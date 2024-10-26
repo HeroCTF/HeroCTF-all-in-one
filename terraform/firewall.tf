@@ -24,10 +24,10 @@ resource "linode_firewall" "dynamic_challenge_firewall" {
     }
 
     inbound {
-        label    = "allow-docker-cadvisor"
+        label    = "allow-cadvisor-node_exporter"
         action   = "ACCEPT"
         protocol = "TCP"
-        ports    = "1080"
+        ports    = "1080,9100"
         // IPv4 from the VPC
         ipv4     = [
             for interface in linode_instance.deploy_dynamic.interface : "${interface.ipv4[0].vpc}/32"
@@ -66,10 +66,10 @@ resource "linode_firewall" "static_challenge_firewall" {
     }
 
     inbound {
-        label    = "allow-docker-cadvisor"
+        label    = "allow-cadvisor-node_exporter"
         action   = "ACCEPT"
         protocol = "TCP"
-        ports    = "1080"
+        ports    = "1080,9100"
         // IPv4 from the VPC
         ipv4     = [
             for interface in linode_instance.deploy_dynamic.interface : "${interface.ipv4[0].vpc}/32"
