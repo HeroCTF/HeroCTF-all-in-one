@@ -37,21 +37,6 @@
             {{''}}
       {%- endfor -%}
 
-# - name: Collect IP addresses from challenges (/etc/hosts)
-#   ansible.builtin.set_fact:
-#     hosts_content: >-
-#       {% for host in groups['static-challenges'] + groups['dynamic-challenges'] %}
-#       {{ hostvars[host]['ansible_eth1']['ipv4']['address'] }} {{ hostvars[host]['ansible_hostname'] }}
-#       {% endfor %}
-
-# - name: Populate /etc/hosts with 'hosts_content'
-#   ansible.builtin.lineinfile:
-#     path: /etc/hosts
-#     line: "{{ item }}"
-#     state: present
-#   loop: "{{ hosts_content.splitlines() }}"
-#   become: true
-
 - name: "Setup Prometheus configuration"
   ansible.builtin.template:
     src: prometheus.yml.j2
