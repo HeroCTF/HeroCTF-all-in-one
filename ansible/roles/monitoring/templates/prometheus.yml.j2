@@ -10,3 +10,7 @@ scrape_configs:
   - job_name: "cadvisor"
     static_configs:
       - targets: ["cadvisor:8080", "35.180.196.232:8080" {{ ip_addresses }}]
+
+  - job_name: "node"
+    static_configs:
+      - targets: ["node_exporter:9100"]

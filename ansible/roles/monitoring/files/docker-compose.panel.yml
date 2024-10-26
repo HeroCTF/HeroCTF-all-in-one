@@ -2,8 +2,8 @@ services:
 
   cadvisor:
     image: gcr.io/cadvisor/cadvisor:v0.50.0
-    restart: unless-stopped
     container_name: cadvisor
+    restart: unless-stopped
     volumes:
       - /:/rootfs:ro
       - /var/run:/var/run:ro
@@ -13,10 +13,26 @@ services:
     networks:
       - monitoring_net
 
+  node-exporter:
+    image: prom/node-exporter:latest
+    container_name: node_exporter
+    restart: unless-stopped
+    volumes:
+      - /proc:/host/proc:ro
+      - /sys:/host/sys:ro
+      - /:/rootfs:ro
+    command:
+      - '--path.procfs=/host/proc'
+      - '--path.rootfs=/rootfs'
+      - '--path.sysfs=/host/sys'
+      - '--collector.filesystem.mount-points-exclude=^/(sys|proc|dev|host|etc)($$|/)'
+    networks:
+      - monitoring_net
+
   prometheus:
     image: prom/prometheus:main
-    restart: unless-stopped
     container_name: prometheus
+    restart: unless-stopped
     volumes:
       - ./prometheus.yml:/etc/prometheus/prometheus.yml
     command:
@@ -30,15 +46,15 @@ services:
 
   grafana:
     image: grafana/grafana:main
-    restart: unless-stopped
     container_name: grafana
+    restart: unless-stopped
     environment: 
       - GF_SECURITY_ADMIN_USER=admin
       - GF_SECURITY_ADMIN_PASSWORD=${GRAFANA_ADMIN_PASSWORD}
     volumes:
       - ./datasource.yaml:/etc/grafana/provisioning/datasources/datasource.yaml
     ports:
-      - "9100:3000"
+      - "9000:3000"
     depends_on:
       - prometheus
     networks:

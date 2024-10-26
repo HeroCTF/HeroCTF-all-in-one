@@ -129,7 +129,7 @@ resource "linode_firewall" "deploy_dynamic_firewall" {
         label    = "allow-grafana"
         action   = "ACCEPT"
         protocol = "TCP"
-        ports    = "9100"
+        ports    = "9000"
         ipv4     = ["0.0.0.0/0"]
         ipv6     = ["::/0"]
     }
