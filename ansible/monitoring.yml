@@ -1,0 +1,7 @@
+---
+
+- name: Setup the monitoring stack
+  hosts: deploy-dynamic:static-challenges:dynamic-challenges
+  gather_facts: true
+  roles:
+    - monitoring

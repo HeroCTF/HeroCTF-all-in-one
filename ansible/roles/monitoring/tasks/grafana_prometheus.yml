@@ -1,0 +1,42 @@
+---
+
+- name: Copy docker compose and settings files
+  ansible.builtin.copy:
+    src: "files/{{ item.src }}"
+    dest: "{{ monitoring_install_path }}/{{ item.dest }}"
+    owner: "{{ ctf_user }}"
+    group: "{{ ctf_user }}"
+    mode: "0644"
+  become: true
+  become_user: "{{ ctf_user }}"
+  loop:
+    - { src: "docker-compose.panel.yml", dest: "docker-compose.yml" }
+    - { src: "datasource.yaml", dest: "datasource.yaml" }
+    - { src: ".env", dest: ".env" }
+
+# ansible -i inventories/prod -m setup heroctf-static-1
+- name: Collect IP addresses from challenges
+  ansible.builtin.set_fact:
+    ip_addresses: >-
+      {% for host in groups['static-challenges'] + groups['dynamic-challenges'] -%}
+        , "{{ hostvars[host]['ansible_eth1']['ipv4']['address']}}:1080"
+      {%- endfor -%}
+
+- name: "Setup Prometheus configuration"
+  ansible.builtin.template:
+    src: prometheus.yml.j2
+    dest: "{{ monitoring_install_path }}/prometheus.yml"
+    owner: "{{ ctf_user }}"
+    group: "{{ ctf_user }}"
+    mode: "0644"
+  become: true
+  become_user: "{{ ctf_user }}"
+
+- name: Start monitor panel docker-compose
+  ansible.builtin.shell: "docker compose up -d --build --force-recreate"
+  args:
+    chdir: "{{ monitoring_install_path }}"
+  register: panel_compose_output
+  changed_when: "'recreated' in panel_compose_output.stdout or 'Pulling' in panel_compose_output.stdout"
+  become: true
+  become_user: "{{ ctf_user }}"

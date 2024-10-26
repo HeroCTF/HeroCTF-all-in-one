@@ -1,0 +1,20 @@
+---
+
+- name: "Create '{{ monitoring_install_path }}' directory"
+  ansible.builtin.file:
+    path: "{{ monitoring_install_path }}"
+    state: directory
+    owner: "{{ ctf_user }}"
+    group: "{{ ctf_user }}"
+  become: true
+  become_user: "{{ ctf_user }}"
+
+- name: Setup Grafana and Prometheus
+  ansible.builtin.import_tasks:
+    file: grafana_prometheus.yml
+  when: inventory_hostname in groups['deploy-dynamic']
+
+- name: Setup cAdvisor
+  ansible.builtin.import_tasks:
+    file: cadvisor.yml
+  when: inventory_hostname not in groups['deploy-dynamic']

@@ -1,0 +1,12 @@
+global:
+  scrape_interval: 15s
+  evaluation_interval: 15s
+
+scrape_configs:
+  - job_name: "prometheus"
+    static_configs:
+      - targets: ["prometheus:9090"]
+  
+  - job_name: "cadvisor"
+    static_configs:
+      - targets: ["cadvisor:8080", "35.180.196.232:8080" {{ ip_addresses }}]
