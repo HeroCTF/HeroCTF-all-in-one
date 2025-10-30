@@ -1,25 +1,14 @@
 ---
 
-- name: Add Docker GPG apt Key
-  ansible.builtin.apt_key:
-    url: https://download.docker.com/linux/debian/gpg
-    state: present
+- name: Download Docker installation script
+  ansible.builtin.get_url:
+    url: https://get.docker.com/
+    dest: "{{ ansible_env.HOME }}/install-docker.sh"
+    mode: '0755'
   become: true
 
-- name: Add Docker Repository
-  ansible.builtin.apt_repository:
-    repo: "deb https://download.docker.com/linux/debian {{ ansible_distribution_release }} stable"
-    state: present
-  become: true
-
-- name: Install docker & docker-compose
-  ansible.builtin.apt:
-    pkg:
-      - docker-ce
-      - docker-ce-cli
-      - containerd.io
-      - docker-buildx-plugin
-      - docker-compose-plugin
+- name: Run Docker installation script
+  ansible.builtin.command: "{{ ansible_env.HOME }}/install-docker.sh"
   become: true
 
 - name: "Add 'docker' group to '{{ ctf_user }}'"

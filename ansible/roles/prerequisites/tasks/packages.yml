@@ -14,6 +14,8 @@
       - p7zip-full
       - curl
       - wget
+      - netcat-openbsd
+      - net-tools
       - acl # required by ansible to become an unprivileged user
-      - gnupg # required to add the Docker repository
+      - gnupg # required to add docker's repository
   become: true
