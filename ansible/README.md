@@ -63,7 +63,7 @@ ansible -i inventories/prod -m ping all -v
 4. (optional) Extract custom CTFd theme.
 5. (optional) Enable first blood Discord webhook.
 
-> Generate your HTTPs certificates using certbot: `certbot certonly --manual --preferred-challenges dns -d 'ctf.heroctf.fr' --work-dir $(pwd) --logs-dir $(pwd) --config-dir $(pwd)`
+> Generate your HTTPs certificates using certbot: `cd /tmp && certbot certonly --manual --preferred-challenges dns -d 'ctf.heroctf.fr' --work-dir $(pwd) --logs-dir $(pwd) --config-dir $(pwd) && cp /tmp/live/ctf.heroctf.fr/*.pem ./roles/ctfd/files/certs/`
 
 #### Setup & Run
 
@@ -107,4 +107,4 @@ ansible-lint
 
 ## About
 
-Tested on debian 12.
+Tested on debian 12 and 13.
