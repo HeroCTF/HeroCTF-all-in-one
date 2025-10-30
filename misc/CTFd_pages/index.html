@@ -1,12 +1,14 @@
 <div class="row">
-	<div class="col-md-10 offset-md-1"> <img class="mx-auto mt-4 mb-4 d-block" style="border-radius: 5%;" height="350" src="/files/34ae97e8adef9fec9ea8294afc6d2705/HeroCTF_icon_500.png" />
+	<div class="col-md-10 offset-md-1"> <img class="mx-auto mt-4 mb-4 d-block" style="border-radius: 5%;" height="350" src="/files/bd4cb99b49949a9dd3df3bbbdfa56ec3/HeroCTF_icon_500.png" />
 		<h1 class="text-center">
-           <strong>Welcome to HeroCTF v6 !</strong>
+           <strong>Welcome to HeroCTF v7 !</strong>
         </h1>
 		<h3 class="text-center mt-3">
-            <p><strong>Event in :</strong></p>
+            <p><strong>Event in</strong></p>
             <p id="countdown">...</p>
-            <p>Start : 25 october at 9pm - End : 27 october at 11pm (UTC+2 - Paris)
+          	<hr />
+            <p>28 Nov at 9pm - 30 Nov at 11pm<p/>
+          	<p>(UTC+1 - Europe/Paris)<p/>
         </h3>
 		<h4 class="text-center mt-5">
             <a class="mx-2" href="https://twitter.com/HeroCTF" target="_blank">
@@ -27,7 +29,7 @@
 <script>
 document.addEventListener("DOMContentLoaded", function(event) {
     // Year, Month index (month-1), Day, Hour, Minutes
-	const choosenDate = Date.UTC(2024, 9, 25, 19, 0);
+	const choosenDate = Date.UTC(2025, 10, 28, 20, 0);
 	let countdown = setInterval(function() {
 		if(choosenDate - new Date().getTime() > 0) {
 			const today = new Date().getTime();
