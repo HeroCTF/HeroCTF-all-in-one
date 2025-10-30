@@ -1,19 +1,13 @@
-import sys
 import smtplib
 from email.mime.text import MIMEText
 from email.mime.multipart import MIMEMultipart
 
 
-if len(sys.argv) != 2:
-    print("Usage: python3 send_email_test.py <password>")
-    exit()
-
 smtp_server = "ssl0.ovh.net"
 port = 587
 sender_email = "no-reply@heroctf.fr"
-password = sys.argv[1]
+password = input("Password: ").strip()
 
-context = smtplib.ssl.create_default_context()
 receiver_email = "heroctf-test@yopmail.com"
 subject = "Test Email"
 body = "This is a test email sent from Python."
@@ -25,6 +19,7 @@ message["Subject"] = subject
 
 message.attach(MIMEText(body, "plain"))
 
+context = smtplib.ssl.create_default_context()
 with smtplib.SMTP(smtp_server, port) as server:
     server.starttls(context=context)
     server.login(sender_email, password)
