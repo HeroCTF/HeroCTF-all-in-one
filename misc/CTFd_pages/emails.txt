@@ -1,0 +1,5 @@
+Links:
+- https://ctftime.org/event/2869
+- https://discord.gg/mgk9bv7
+- https://twitter.com/HeroCTF
+- https://www.linkedin.com/company/heroctf/
