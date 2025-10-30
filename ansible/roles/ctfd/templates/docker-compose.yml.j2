@@ -1,5 +1,3 @@
----
-
 services:
   ctfd:
     build: .
@@ -17,9 +15,9 @@ services:
       - SECRET_KEY=${SECRET_KEY}
       - DISCORD_WEBHOOK_URL=${DISCORD_WEBHOOK_URL} # Discord Webhook for first blood bot
     volumes:
-      - ./data/CTFd/logs:/var/log/CTFd
-      - ./data/CTFd/uploads:/var/uploads
-      - .:/opt/CTFd:ro
+      - ./data/CTFd/logs/:/var/log/CTFd/
+      - ./data/CTFd/uploads/:/var/uploads/
+      - .:/opt/CTFd/:ro
     depends_on:
       - db
     networks:
@@ -27,11 +25,11 @@ services:
       internal:
 
   nginx:
-    image: nginx:1.27-alpine
+    image: nginx:stable-alpine
     restart: always
     volumes:
       - ./conf/nginx/http.conf:/etc/nginx/nginx.conf
-      - ./conf/nginx/certs:/etc/nginx/certs
+      - ./conf/nginx/certs/:/etc/nginx/certs/
     ports:
       - 443:443
     depends_on:
@@ -40,22 +38,22 @@ services:
       default:
 
   db:
-    image: postgres:17-alpine
+    image: postgres:18-alpine
     restart: always
     environment:
       - POSTGRES_USER=ctfd
       - POSTGRES_PASSWORD=ctfd
       - POSTGRES_DB=ctfd
     volumes:
-      - ./data/postgres:/var/lib/postgresql/data
+      - ./data/postgres/:/var/lib/postgresql/
     networks:
       internal:
 
   redis:
-    image: redis:7-alpine
+    image: redis:8-alpine
     restart: always
     volumes:
-      - ./data/redis:/data
+      - ./data/redis/:/data/
     networks:
       internal:
 

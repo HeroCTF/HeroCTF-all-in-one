@@ -60,7 +60,7 @@
 
 - name: "Copy 'CTFd_api_v1_challenges.py' for first blood Discord webhook"
   ansible.builtin.copy:
-    src: "files/CTFd_api_v1_challenges.py"
+    src: "files/CTFd_v{{ ctfd_version }}_api_v1_challenges.py"
     dest: "{{ ctfd_install_path }}/CTFd/api/v1/challenges.py"
     owner: "{{ ctf_user }}"
     group: "{{ ctf_user }}"
@@ -70,7 +70,7 @@
 
 - name: "Copy 'CTFd_config.py' for better connection settings with the database"
   ansible.builtin.copy:
-    src: "files/CTFd_config.py"
+    src: "files/CTFd_v{{ ctfd_version }}_config.py"
     dest: "{{ ctfd_install_path }}/CTFd/config.py"
     owner: "{{ ctf_user }}"
     group: "{{ ctf_user }}"
@@ -85,14 +85,18 @@
   become_user: "{{ ctf_user }}"
   when: ctfd_install_theme
 
-- name: "Create a 'data' directory for docker-compose volumes"
+- name: "Create directories for docker-compose volumes"
   ansible.builtin.file:
-    path: "{{ ctfd_install_path }}/data/"
+    path: "{{ ctfd_install_path }}/{{ item }}"
     state: directory
     owner: "{{ ctf_user }}"
     group: "{{ ctf_user }}"
     mode: "0777"
     recurse: true
+  loop:
+    - data/
+    - data/postgres/
+    - data/redis/
   become: true
 
 - name: "Add 'psycopg2-binary' to requirements.txt for PostgreSQL connection"
