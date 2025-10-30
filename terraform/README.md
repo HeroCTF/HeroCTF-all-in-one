@@ -23,7 +23,7 @@ Copy the [.env.sample](.env.sample) file to `.env` and fill the environment vari
 
 ```bash
 mkdir -p ~/.ssh/heroctf/
-ssh-keygen -f ~/.ssh/heroctf/linode -C 'heroctf@challenge'
+ssh-keygen -f ~/.ssh/heroctf/linode -C 'hero@ctf'
 chmod 600 ~/.ssh/heroctf/linode
 ```
 
@@ -34,8 +34,8 @@ Initialize, plan & apply `terraform`:
 ```bash
 set -a; source .env; set +a
 terraform init
-terraform plan -var='static_challenges_count=1' -var='dynamic_challenges_count=1'
-terraform apply -var='static_challenges_count=1' -var='dynamic_challenges_count=1'
+terraform plan -var-file vars/prectf.tfvars
+terraform apply -var-file vars/prectf.tfvars
 
 ssh root@<public_ip_v4_address> -i ~/.ssh/heroctf/linode
 ```
