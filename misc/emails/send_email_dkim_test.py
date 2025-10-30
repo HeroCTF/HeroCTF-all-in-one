@@ -15,7 +15,7 @@ message_text = "This is a test email sent from Python."
 message_html = message_text
 
 dkim_selector = "mail2025"
-dkim_private_key_path = "./dkim_heroctf.private"
+dkim_private_key_path = "./dkim_heroctf.priv"
 
 sender_domain = sender_email.split("@")[-1]
 msg = MIMEMultipart("alternative")
