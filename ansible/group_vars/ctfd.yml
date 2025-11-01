@@ -5,3 +5,6 @@ ctfd_install_theme: true
 ctfd_theme_name: "hacker_theme.zip"
 
 ctfd_install_discord_webhook: false
+
+ctfd_install_dkim: true
+ctfd_dkim_private_key: "dkim_ctfd.key"

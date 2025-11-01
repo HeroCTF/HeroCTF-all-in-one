@@ -13,6 +13,8 @@ services:
       - ERROR_LOG=-
       - REVERSE_PROXY=true
       - SECRET_KEY=${SECRET_KEY}
+      - DKIM_PRIVATE_KEY_PATH=${DKIM_PRIVATE_KEY_PATH}
+      - DKIM_SELECTOR=${DKIM_SELECTOR}
       - DISCORD_WEBHOOK_URL=${DISCORD_WEBHOOK_URL} # Discord Webhook for first blood bot
     volumes:
       - ./data/CTFd/logs/:/var/log/CTFd/

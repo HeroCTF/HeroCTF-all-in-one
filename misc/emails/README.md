@@ -11,15 +11,15 @@ v=spf1 include:mx.ovh.com ~all
 ## DKIM
 
 ```bash
-openssl genrsa -out dkim_heroctf.priv 2048
-openssl rsa -in dkim_heroctf.priv -pubout -out dkim_heroctf.pub
-echo "v=DKIM1; k=rsa; p=$(cat dkim_heroctf.pub | grep -v -- '-----' | tr -d '\n');"
+openssl genrsa -out dkim_ctfd.key 2048
+openssl rsa -in dkim_ctfd.key -pubout -out dkim_ctfd.pub
+echo "v=DKIM1; k=rsa; p=$(cat dkim_ctfd.pub | grep -v -- '-----' | tr -d '\n');"
 ```
 
 Example:
 
-- DKIM selector: `mail2025`
-- DNS TXT at `mail2025._domainkey.heroctf.fr`
+- DKIM selector: `ctfd`
+- DNS TXT at `ctfd._domainkey.heroctf.fr`
 
 ## Cloud Providers
 

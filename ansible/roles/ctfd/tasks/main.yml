@@ -58,6 +58,26 @@
     - privkey.pem
   become: true
 
+- name: "Copy '{{ ctfd_dkim_private_key }}' to '{{ ctfd_install_path }}/conf/'"
+  ansible.builtin.copy:
+    src: "files/{{ ctfd_dkim_private_key }}"
+    dest: "{{ ctfd_install_path }}/conf/{{ ctfd_dkim_private_key }}"
+    owner: "{{ ctf_user }}"
+    group: "{{ ctf_user }}"
+    mode: "0644"
+  when: ctfd_install_dkim
+  become: true
+
+- name: "Copy 'CTFd_smtp.py' for DKIM configuration"
+  ansible.builtin.copy:
+    src: "files/CTFd_v{{ ctfd_version }}_smtp.py"
+    dest: "{{ ctfd_install_path }}/CTFd/utils/email/providers/smtp.py"
+    owner: "{{ ctf_user }}"
+    group: "{{ ctf_user }}"
+    mode: "0644"
+  when: ctfd_install_dkim
+  become: true
+
 - name: "Copy 'CTFd_api_v1_challenges.py' for first blood Discord webhook"
   ansible.builtin.copy:
     src: "files/CTFd_v{{ ctfd_version }}_api_v1_challenges.py"
@@ -99,8 +119,8 @@
     - data/redis/
   become: true
 
-- name: "Add 'psycopg2-binary' to requirements.txt for PostgreSQL connection"
-  ansible.builtin.shell: "echo 'psycopg2-binary' >> requirements.txt"
+- name: "Add 'psycopg2-binary' and 'dkimpy' to requirements.txt"
+  ansible.builtin.shell: "echo 'psycopg2-binary\ndkimpy' >> requirements.txt"
   args:
     chdir: "{{ ctfd_install_path }}"
   become: true
