@@ -39,16 +39,19 @@ class SMTPEmailProvider(EmailProvider):
         try:
             smtp = get_smtp(**data)
 
-            msg = EmailMessage()
-            msg.set_content(text)
-
-            msg["Subject"] = subject
-            msg["From"] = mailfrom_addr
-            msg["To"] = addr
-
             # ==== PATCH START ==== #
-            import dkim
             from os import getenv
+            from email.mime.multipart import MIMEMultipart
+            from email.mime.text import MIMEText
+
+            import dkim
+
+            msg = MIMEMultipart("alternative")
+            msg.attach(MIMEText(text, "plain"))
+
+            msg["To"] = addr
+            msg["From"] = mailfrom_addr
+            msg["Subject"] = subject
 
             dkim_private_key_path = getenv("DKIM_PRIVATE_KEY_PATH")
             dkim_selector = getenv("DKIM_SELECTOR")
@@ -60,23 +63,15 @@ class SMTPEmailProvider(EmailProvider):
             sig = dkim.sign(
                 message=msg.as_bytes(),
                 selector=str(dkim_selector).encode(),
-                domain=sender_domain.encode(),
+                domain=mailfrom_addr.split("@")[-1].strip("<> ").encode(),
                 privkey=dkim_private_key,
                 include_headers=headers,
             )
             msg["DKIM-Signature"] = sig[len("DKIM-Signature: ") :].decode()
-            msg = msg.as_bytes()
+            msg_data = msg.as_bytes()
+
+            smtp.sendmail(mailfrom_addr, addr, msg_data)
             # ==== PATCH END ==== #
-
-            # Check whether we are using an admin-defined SMTP server
-            custom_smtp = bool(get_config("mail_server"))
-
-            # We should only consider the MAILSENDER_ADDR value on servers defined in config
-            if custom_smtp:
-                smtp.send_message(msg)
-            else:
-                mailsender_addr = get_app_config("MAILSENDER_ADDR")
-                smtp.send_message(msg, from_addr=mailsender_addr)
 
             smtp.quit()
             return True, "Email sent"
