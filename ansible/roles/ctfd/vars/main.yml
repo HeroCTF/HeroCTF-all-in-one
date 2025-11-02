@@ -1,1 +1,0 @@
-ctfd_install_path: "/home/{{ ctf_user }}/CTFd"

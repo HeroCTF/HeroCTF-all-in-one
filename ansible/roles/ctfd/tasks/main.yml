@@ -68,9 +68,9 @@
   when: ctfd_install_dkim
   become: true
 
-- name: "Copy 'CTFd_smtp.py' for DKIM configuration"
+- name: "Copy 'smtp.py' for DKIM configuration"
   ansible.builtin.copy:
-    src: "files/CTFd_v{{ ctfd_version }}_smtp.py"
+    src: "files/CTFd/{{ ctfd_version }}/smtp.py"
     dest: "{{ ctfd_install_path }}/CTFd/utils/email/providers/smtp.py"
     owner: "{{ ctf_user }}"
     group: "{{ ctf_user }}"
@@ -78,9 +78,9 @@
   when: ctfd_install_dkim
   become: true
 
-- name: "Copy 'CTFd_api_v1_challenges.py' for first blood Discord webhook"
+- name: "Copy 'api_challenges.py' for first blood Discord webhook"
   ansible.builtin.copy:
-    src: "files/CTFd_v{{ ctfd_version }}_api_v1_challenges.py"
+    src: "files/CTFd/{{ ctfd_version }}/api_challenges.py"
     dest: "{{ ctfd_install_path }}/CTFd/api/v1/challenges.py"
     owner: "{{ ctf_user }}"
     group: "{{ ctf_user }}"
@@ -88,9 +88,9 @@
   when: ctfd_install_discord_webhook
   become: true
 
-- name: "Copy 'CTFd_config.py' for better connection settings with the database"
+- name: "Copy 'config.py' for better connection settings with the database"
   ansible.builtin.copy:
-    src: "files/CTFd_v{{ ctfd_version }}_config.py"
+    src: "files/CTFd/{{ ctfd_version }}/config.py"
     dest: "{{ ctfd_install_path }}/CTFd/config.py"
     owner: "{{ ctf_user }}"
     group: "{{ ctf_user }}"
@@ -125,6 +125,15 @@
     chdir: "{{ ctfd_install_path }}"
   become: true
   become_user: "{{ ctf_user }}"
+
+- name: "Copy 'motd.j2' to '/etc/motd'"
+  ansible.builtin.template:
+    src: "motd.j2"
+    dest: "/etc/motd"
+    owner: "root"
+    group: "root"
+    mode: "0644"
+  become: true
 
 - name: Start CTFd docker-compose
   ansible.builtin.shell: "docker compose up -d --build"

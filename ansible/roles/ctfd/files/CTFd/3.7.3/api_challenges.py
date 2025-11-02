@@ -1,5 +1,4 @@
-# CTFd version 3.7.3
-# Initial file: https://github.com/CTFd/CTFd/blob/3.7.3/CTFd/api/v1/challenges.py
+# CTFd version 3.8.0 - https://github.com/CTFd/CTFd/blob/3.7.3/CTFd/api/v1/challenges.py
 from typing import List  # noqa: I001
 
 from flask import abort, render_template, request, url_for
