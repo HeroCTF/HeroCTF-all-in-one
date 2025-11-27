@@ -1,8 +1,9 @@
 # ===============[ ALL ]===============
 ctf_user: "heroctf"
+ctf_home: "/home/{{ ctf_user }}"
 
 # ===============[ CTFD ]===============
-ctfd_install_path: "/home/{{ ctf_user }}/CTFd"
+ctfd_install_path: "{{ ctf_home }}/CTFd"
 ctfd_version: "3.8.0"
 ctfd_domain: "ctf.heroctf.fr"
 
@@ -16,7 +17,7 @@ ctfd_dkim_private_key: "dkim_ctfd.key"
 
 # ============[ CHALLENGES ]============
 challenges_git_url: "git@github.com:HeroCTF/HeroCTF_v7.git"
-challenges_install_path: "/home/{{ ctf_user }}/challenges"
+challenges_install_path: "{{ ctf_home }}/challenges"
 
 # ============[ DEPLOY DYNAMIC ]============
-deploy_dynamic_install_path: "/home/{{ ctf_user }}/deploy-dynamic"
+deploy_dynamic_install_path: "{{ ctf_home }}/deploy-dynamic"
