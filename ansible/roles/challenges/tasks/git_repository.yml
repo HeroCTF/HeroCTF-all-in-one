@@ -31,3 +31,11 @@
   become_user: "{{ ctf_user }}"
   register: git_challenge_output
   changed_when: git_challenge_output.changed
+
+- name: Install and pull Git LFS files
+  ansible.builtin.shell: "git lfs install; git lfs pull"
+  args:
+    chdir: "{{ challenges_install_path }}"
+    executable: /bin/bash
+  become: true
+  become_user: "{{ ctf_user }}"

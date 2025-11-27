@@ -1,2 +1,0 @@
-challenges_git_url: "git@github.com:HeroCTF/HeroCTF_v6.git"
-challenges_install_path: "/home/{{ ctf_user }}/challenges"

@@ -1,18 +1,13 @@
 [ctfd]
-heroctf-prodctfd ansible_connection=ssh ansible_user=admin
+heroctf-ctfd-prod ansible_connection=ssh ansible_user=admin
 
 [deploy-dynamic]
 heroctf-deploy-dynamic ansible_connection=ssh ansible_user=root
 
 [static-challenges]
-heroctf-static-1 ansible_connection=ssh ansible_user=root
-heroctf-static-2 ansible_connection=ssh ansible_user=root
-heroctf-static-3 ansible_connection=ssh ansible_user=root
+heroctf-static-01 ansible_connection=ssh ansible_user=root
 
 [dynamic-challenges]
-heroctf-dynamic-1 ansible_connection=ssh ansible_user=root
-heroctf-dynamic-2 ansible_connection=ssh ansible_user=root
-heroctf-dynamic-3 ansible_connection=ssh ansible_user=root
-heroctf-dynamic-4 ansible_connection=ssh ansible_user=root
-heroctf-dynamic-5 ansible_connection=ssh ansible_user=root
-heroctf-dynamic-6 ansible_connection=ssh ansible_user=root
+heroctf-dynamic-01 ansible_connection=ssh ansible_user=root
+heroctf-dynamic-02 ansible_connection=ssh ansible_user=root
+heroctf-dynamic-03 ansible_connection=ssh ansible_user=root

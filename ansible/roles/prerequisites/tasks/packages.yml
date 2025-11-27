@@ -10,6 +10,7 @@
     pkg:
       - vim
       - git
+      - git-lfs
       - unzip
       - p7zip-full
       - curl
@@ -18,4 +19,5 @@
       - net-tools
       - acl # required by ansible to become an unprivileged user
       - gnupg # required to add docker's repository
+    state: present
   become: true

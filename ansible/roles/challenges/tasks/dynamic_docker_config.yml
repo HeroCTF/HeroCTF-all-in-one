@@ -43,5 +43,6 @@
   ansible.builtin.shell: "bash build_dynamic_challenges.sh"
   args:
     chdir: "{{ challenges_install_path }}"
+    executable: /bin/bash
   become: true
   become_user: "{{ ctf_user }}"
