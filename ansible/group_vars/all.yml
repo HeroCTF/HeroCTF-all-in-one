@@ -17,3 +17,6 @@ ctfd_dkim_private_key: "dkim_ctfd.key"
 # ============[ CHALLENGES ]============
 challenges_git_url: "git@github.com:HeroCTF/HeroCTF_v7.git"
 challenges_install_path: "/home/{{ ctf_user }}/challenges"
+
+# ============[ DEPLOY DYNAMIC ]============
+deploy_dynamic_install_path: "/home/{{ ctf_user }}/deploy-dynamic"
