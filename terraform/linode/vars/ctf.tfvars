@@ -1,4 +1,4 @@
-static_challenges_count = 2
-dynamic_challenges_count = 8
+static_challenges_count = 1
+dynamic_challenges_count = 12
 deploy_dynamic_count = 1
 pre_ctfd_count = 0

@@ -11,3 +11,12 @@ heroctf-static-01 ansible_connection=ssh ansible_user=root
 heroctf-dynamic-01 ansible_connection=ssh ansible_user=root
 heroctf-dynamic-02 ansible_connection=ssh ansible_user=root
 heroctf-dynamic-03 ansible_connection=ssh ansible_user=root
+heroctf-dynamic-04 ansible_connection=ssh ansible_user=root
+heroctf-dynamic-05 ansible_connection=ssh ansible_user=root
+heroctf-dynamic-06 ansible_connection=ssh ansible_user=root
+heroctf-dynamic-07 ansible_connection=ssh ansible_user=root
+heroctf-dynamic-08 ansible_connection=ssh ansible_user=root
+heroctf-dynamic-09 ansible_connection=ssh ansible_user=root
+heroctf-dynamic-10 ansible_connection=ssh ansible_user=root
+heroctf-dynamic-11 ansible_connection=ssh ansible_user=root
+heroctf-dynamic-12 ansible_connection=ssh ansible_user=root
