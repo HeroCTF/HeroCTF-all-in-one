@@ -42,6 +42,18 @@ services:
   db:
     image: postgres:18-alpine
     restart: always
+    command:
+      - "postgres"
+      - "-c"
+      - "max_connections=200"
+      - "-c"
+      - "shared_buffers={{ ansible_memtotal_mb // 4 }}MB"
+      - "-c"
+      - "effective_cache_size={{ ansible_memtotal_mb // 2 }}MB"
+      - "-c"
+      - "work_mem=16MB"
+      - "-c"
+      - "maintenance_work_mem={{ ansible_memtotal_mb // 8 }}MB"
     environment:
       - POSTGRES_USER=ctfd
       - POSTGRES_PASSWORD=ctfd
