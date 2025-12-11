@@ -786,6 +786,7 @@ class ChallengeAttempt(Resource):
 
                 # ==== PATCH START ==== #
                 import os
+                import re
                 import requests  
 
                 from CTFd.models import Users
@@ -800,12 +801,14 @@ class ChallengeAttempt(Resource):
 
                     if 1 <= solves_count <= 3:
                         content = ""
+                        user_name = re.sub(r"[^a-zA-Z0-9_!?\.\-' ]", "", user.name)
+                        team_name = re.sub(r"[^a-zA-Z0-9_!?\.\-' ]", "", team.name)
                         if solves_count == 1:
-                            content = f":first_place: :drop_of_blood: First blood on **{challenge.name}** by **{user.name}** from **{team.name}** :triangular_flag_on_post:"
+                            content = f":first_place: :drop_of_blood: First blood on **{challenge.name}** by **{user_name}** from **{team_name}** :triangular_flag_on_post:"
                         elif solves_count == 2:
-                            content = f":second_place: :drop_of_blood: Second blood on **{challenge.name}** by **{user.name}** from **{team.name}** :triangular_flag_on_post:"
+                            content = f":second_place: :drop_of_blood: Second blood on **{challenge.name}** by **{user_name}** from **{team_name}** :triangular_flag_on_post:"
                         elif solves_count == 3:
-                            content = f":third_place: :drop_of_blood: Third blood on **{challenge.name}** by **{user.name}** from **{team.name}** :triangular_flag_on_post:"
+                            content = f":third_place: :drop_of_blood: Third blood on **{challenge.name}** by **{user_name}** from **{team_name}** :triangular_flag_on_post:"
                         requests.post(DISCORD_WEBHOOK_URL, data={'content': content})
                 # ==== PATCH END ==== #
 
